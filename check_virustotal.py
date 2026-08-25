@@ -1,5 +1,6 @@
 import hashlib
 import requests
+import sys
 
 def calculate_hash(file_path, hash_type='sha256'):
     hasher = hashlib.new(hash_type)
@@ -32,11 +33,14 @@ def get_virustotal_report(hash_value, api_key):
         return f"Error: {response.status_code}"
 
 if __name__ == "__main__":
-    file_path = 'path_to_your_file'  # Replace with the path to the file you want to hash
-    api_key = 'your_virustotal_api_key'  # Replace with your VirusTotal API key
-
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+    else:
+        file_path = input("Please enter the path to the file you want to hash: ")
+    
     file_hash = calculate_hash(file_path)
     print(f"Calculated hash: {file_hash}")
 
+    api_key = input("Please enter your VirusTotal API key: ")
     report_link = get_virustotal_report(file_hash, api_key)
     print(f"VirusTotal report link: {report_link}")
